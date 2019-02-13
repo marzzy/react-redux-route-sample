@@ -1,0 +1,79 @@
+// reset -----------------------------------------------------------------------
+html {
+	border: 0 none;
+	margin: 0;
+	padding: 0;
+}
+article,aside,footer,header,main,menu,nav,section,img {
+	display: block;margin: 0;padding: 0;
+}
+p,div,span,a {
+  margin: 0;padding: 0;
+}
+body {
+	background: white;
+	color: black;
+	direction: rtl;
+}
+label {
+	cursor: pointer;
+}
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+a {
+	text-decoration: none;
+}
+a img {
+	border: none;
+}
+:focus {
+	outline: 0;
+}
+input,textarea {
+	border-top: 0;
+	border-bottom: 0;
+	border-left: 0;
+	border-right: 0;
+	resize: vertical;
+}
+th {
+	font-weight: normal;
+}
+// common ----------------------------------------------------------------------
+body { max-width: 1200px; margin: 0 auto;}
+@media screen and (max-width: 1200px) {
+	body {
+		padding: 0 8px;
+		box-sizing: border-box;
+	}
+}
+
+.bx-sz {  box-sizing: border-box; }
+
+.clr-wit, .clr-wit > a { color: white; }
+.clr-blk, .clr-blk > a { color: black; }
+
+.flex-me {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+}
+
+
+
+#main-header {
+	background: #0081ff;
+}
+#content {
+	min-height: 80px;
+	background: #43bdde;
+	margin: 10px 0;
+}
+#main-footer {
+	background: #12b06c;
+}

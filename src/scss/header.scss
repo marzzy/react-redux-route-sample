@@ -1,0 +1,29 @@
+#main-header {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr 1fr;
+  grid-template-areas: 
+    "navbar . searchbar logo";
+  justify-items: center;
+
+  .header-navbar {
+    grid-area: navbar;
+    justify-self: end;
+    
+    ul {
+      @extend .flex-me;
+
+      li {
+        @extend .bx-sz;
+        padding: 8px;
+      }
+    }
+  }
+  .header-logo {
+    grid-area: logo;
+  }
+  .header-search {
+    @extend .flex-me;
+    grid-area: searchbar;
+  }
+  
+}
