@@ -1,66 +1,83 @@
+/* eslint-disable */
+
 import React from 'react';
-import { Route, Link } from "react-router-dom"
-import PropTypes from 'prop-types';
+// import { Route, Router } from "react-router-dom"
+// import { Route, Link } from "react-router-dom"
+// import PropTypes from 'prop-types';
 
-const EvantsBody = ({ match }) => (
-  <div>
-    <Route path={`${match.url}/:eventTitle`} component={TheEvent} />
-    <Route exact path={match.url} render={beforeChooseEvent} />
-  </div>
-);
+class EvantsBody extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      content: [],
+      isLoading: true,
+      errors: null
+    };
+  }
 
-const TheEvent = ({ match }) => (
-  <div>
-    <h3>{match.params.eventTitle}</h3>
-    <p>
-      این توضیحات یک ایونت خاص است 
-    </p>
-  </div>
-);
+  fetchData() {
+    fetch('https://api.evand.com/events')
+      .then(res => res.json())
+      .then((data) => {
+        let mydata = [];
+        console.log(mydata);
+        data.data.map(item => {
+          mydata.push({
+            name: item.name,
+            address: item.address,
+            cover: item.cover.original,
+            organization: item.organization.name,
+            slug: item.slug,
+            id: item.id,
+          })
+        })
+        console.log(mydata);
+        this.setState({ content: mydata,isLoading: false});
+        console.log('hi3');
+      })
+      .catch(error => this.setState({ errors: `${error}`}))
+  }
+  
+  componentDidMount() {
+    this.fetchData();
+  }
+  render () {
+    const { isLoading, content} = this.state;
+    return(
+      <>
+      {!isLoading ?
+        (
+          <div>
+            <h2>صفحه رویداد ها</h2>
+            <ul className="eventList">
+                {content.map(item => <li key={item.id}><EventItem theItem={item} /></li>)}
+            </ul>
+          </div>
+        ) : (
+          <p>
+            در حال بارگزاری ... 
+          </p>
+        )
+      }
+      </>
+    );
+  }
+}
 
-const beforeChooseEvent = ({ match }) => (
-  <>
-    <h2>صفحه رویداد ها</h2>
-    <ul>
-      <li>
-        <Link to={`${match.url}/event1th`}>
-          رویداد اول
-          </Link>
-      </li>
-      <li>
-        <Link to={`${match.url}/event2nd`}>
-          رویداد دوم
-          </Link>
-      </li>
-      <li>
-        <Link to={`${match.url}/event3th`}>
-          رویداد سوم
-          </Link>
-      </li>
-    </ul>
-  </>
-);
+function EventItem (params) {
+  const { name, address, cover, organization }= params.theItem;
+  return(
+    <>
+      <img src={cover} alt={name} />
+      {name}
+      {address}
+      <div className="org-container">
+        برگذارکننده:
+        {organization}
+      </div>
 
-beforeChooseEvent.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      url: PropTypes.string
-    })
-  })
-};
-EvantsBody.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      url: PropTypes.string
-    })
-  })
-};
-TheEvent.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      url: PropTypes.string
-    })
-  })
-};
+    </>
+  );
+}
 
 export default EvantsBody;

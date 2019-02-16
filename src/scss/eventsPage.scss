@@ -1,0 +1,21 @@
+.eventList {
+  @extend .flex-me;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  
+  li {
+    width: 24%;
+    padding: 8px;
+    box-sizing: border-box;
+    font-size: 14px;
+
+    .org-container {
+      font-size: 13px;
+      color: grey;
+    }
+    img {
+      width: 100%;
+      display: block;
+    }
+  }
+}
