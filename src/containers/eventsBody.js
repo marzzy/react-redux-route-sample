@@ -1,11 +1,16 @@
-/* eslint-disable */
-
 import React from 'react';
-// import { Route, Router } from "react-router-dom"
-// import { Route, Link } from "react-router-dom"
-// import PropTypes from 'prop-types';
+import { Route, Link } from "react-router-dom"
+import PropTypes from 'prop-types';
+import TheEvent from './singleEventBody'
 
-class EvantsBody extends React.Component {
+const EvantsBody = ({ match }) => (
+  <div>
+    <Route path={`${match.url}/:eventTitle`} component={TheEvent} />
+    <Route exact path={match.url} component={MainEventPage} />
+  </div>
+);
+
+class MainEventPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,20 +25,17 @@ class EvantsBody extends React.Component {
       .then(res => res.json())
       .then((data) => {
         let mydata = [];
-        console.log(mydata);
-        data.data.map(item => {
+        data.data.map(item => 
           mydata.push({
+            id: item.id,
+            slug: item.slug,
             name: item.name,
             address: item.address,
-            cover: item.cover.original,
+            cover: item.cover,
             organization: item.organization.name,
-            slug: item.slug,
-            id: item.id,
           })
-        })
-        console.log(mydata);
+        );
         this.setState({ content: mydata,isLoading: false});
-        console.log('hi3');
       })
       .catch(error => this.setState({ errors: `${error}`}))
   }
@@ -42,7 +44,7 @@ class EvantsBody extends React.Component {
     this.fetchData();
   }
   render () {
-    const { isLoading, content} = this.state;
+    const { isLoading, content } = this.state;
     return(
       <>
       {!isLoading ?
@@ -50,7 +52,7 @@ class EvantsBody extends React.Component {
           <div>
             <h2>صفحه رویداد ها</h2>
             <ul className="eventList">
-                {content.map(item => <li key={item.id}><EventItem theItem={item} /></li>)}
+                {content.map(item => <li key={item.id}><EventItem match={this.props.match} theItem={item} /></li>)}
             </ul>
           </div>
         ) : (
@@ -65,12 +67,21 @@ class EvantsBody extends React.Component {
 }
 
 function EventItem (params) {
-  const { name, address, cover, organization }= params.theItem;
+  const { slug, name, address, cover, organization }= params.theItem;
   return(
     <>
-      <img src={cover} alt={name} />
-      {name}
-      {address}
+      { cover ?
+        (<img src={cover.original} alt={name} />) :
+        (<img src={require("../webroot/default-cover.jpg")} alt={name} />)
+      }
+      <p>
+        <Link to={`${params.match.url}/${slug}`} >
+          {name}
+        </Link>
+      </p>
+      <p>
+        {address}
+      </p>
       <div className="org-container">
         برگذارکننده:
         {organization}
@@ -79,5 +90,13 @@ function EventItem (params) {
     </>
   );
 }
+
+EvantsBody.propTypes = {
+  match: PropTypes.shape
+};
+MainEventPage.propTypes = {
+  match: PropTypes.shape
+};
+
 
 export default EvantsBody;
