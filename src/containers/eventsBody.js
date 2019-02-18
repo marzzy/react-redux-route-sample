@@ -1,12 +1,17 @@
+/* eslint-disable */
+
 import React from 'react';
 import { Route, Link } from "react-router-dom"
+import { connect } from "react-redux";
 import PropTypes from 'prop-types';
+import initFetch from '../actions/index'
+import initData from '../reducers/index'
 import TheEvent from './singleEventBody'
 
-const EvantsBody = ({ match }) => (
+const EvantsBody = ({ match } ) => (
   <div>
     <Route path={`${match.url}/:eventTitle`} component={TheEvent} />
-    <Route exact path={match.url} component={MainEventPage} />
+    <Route exact path={match.url} component={MainEventPage} store={store}/>
   </div>
 );
 
@@ -42,6 +47,8 @@ class MainEventPage extends React.Component {
   
   componentDidMount() {
     this.fetchData();
+    // dispatch(initFetch());
+    // this.props.dispatchData();
   }
   render () {
     const { isLoading, content } = this.state;
@@ -92,11 +99,24 @@ function EventItem (params) {
 }
 
 EvantsBody.propTypes = {
-  match: PropTypes.shape
+  match: PropTypes.object,
+  store: PropTypes.object,
 };
 MainEventPage.propTypes = {
-  match: PropTypes.shape
+  match: PropTypes.object
 };
 
+// const mapDispatchToProps = dispatch => ({
+//   dispatchData: () => dispatch(initFetch())
+// })
 
+// const mapStateToProps = state => {
+//   return {
+//     myState: state.getState
+//   }
+// }
+
+
+
+// export default connect(mapStateToProps,mapDispatchToProps)(MainEventPage);
 export default EvantsBody;

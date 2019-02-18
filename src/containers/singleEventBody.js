@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
 const TheEvent = ({ match }) => (
   <div>
     <h3>{match.params.eventTitle}</h3>
